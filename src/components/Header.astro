@@ -1,5 +1,7 @@
 ---
-const path = Astro.url.pathname;
+import { u } from '../lib/sections';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const path = Astro.url.pathname.slice(base.length) || '/';
 const items = [
   ['Communications', '/communications/'],
   ['Creative Studio', '/creative-studio/'],
@@ -14,12 +16,12 @@ const current = (href: string) => path === href || path.startsWith(href);
 ---
 <header class="masthead">
   <div class="wrap">
-    <a class="brand" href="/">David (Dexter) Kamau</a>
+    <a class="brand" href={u('/')}>David (Dexter) Kamau</a>
     <nav class="nav" aria-label="Portfolio sections">
       {items.map(([label, href]) => (
-        <a href={href} aria-current={current(href) ? 'page' : undefined}>{label}</a>
+        <a href={u(href)} aria-current={current(href) ? 'page' : undefined}>{label}</a>
       ))}
-      <a class="cta" href="/contact/" aria-current={current('/contact/') ? 'page' : undefined}>Contact</a>
+      <a class="cta" href={u('/contact/')} aria-current={current('/contact/') ? 'page' : undefined}>Contact</a>
     </nav>
   </div>
 </header>

@@ -2,17 +2,17 @@
 import Base from '../layouts/Base.astro';
 import EntryCard from '../components/EntryCard.astro';
 import figures from '../data/figures.json';
-import { sections, byKey, entriesFor, entryUrl, statusLabel } from '../lib/sections';
+import site from '../data/site.json';
+import { sections, byKey, entriesFor, entryUrl, statusLabel, u } from '../lib/sections';
 
-const comms = (await entriesFor('communications'));
-const leadership = (await entriesFor('leadership'));
-const writing = (await entriesFor('writing'));
-const stage = (await entriesFor('stage'));
-const outdoors = (await entriesFor('outdoors'));
+const comms = await entriesFor('communications');
+const leadership = await entriesFor('leadership');
+const writing = await entriesFor('writing');
+const stage = await entriesFor('stage');
+const outdoors = await entriesFor('outdoors');
 
 const featured = comms.find((e) => e.data.featured) ?? comms[0];
 const otherComms = comms.filter((e) => e.id !== featured?.id).slice(0, 3);
-const jabali = leadership.find((e) => e.id === 'rotaract-jabali');
 const marathon = outdoors.find((e) => e.id === 'nairobi-marathon-2026');
 const dash = outdoors.find((e) => e.id === 'mt-kenya-day-dash');
 
@@ -21,6 +21,24 @@ const lead = byKey('leadership');
 const wr = byKey('writing');
 const st = byKey('stage');
 const ou = byKey('outdoors');
+
+// Four ways in. Each tile is a portrait crop of an existing photo with a navy overlay.
+const tiles = [
+  { href: '/communications/', img: '/images/cib-portrait-half.jpg', pos: '58% 22%', title: 'Communications', sub: 'Brand, events, stakeholders', alt: 'David Kamau beside a CIB banner, smiling with his hand at his chin' },
+  { href: '/leadership/', img: '/images/rotaract-mic.jpg', pos: '56% 28%', title: 'Leadership', sub: 'Rotaract, RYLA, Rotary', alt: 'David Kamau speaking into a microphone wearing a Rotaract club president medal' },
+  { href: '/the-stage/', img: '/images/mc-standing.jpg', pos: '40% 22%', title: 'The Stage', sub: 'MC and moderation', alt: 'David Kamau hosting an event with a microphone, in a red shirt and black waistcoat' },
+  { href: '/outdoors/', img: '/images/forest-seated.jpg', pos: '55% 40%', title: 'Beyond the desk', sub: 'Running and hiking', alt: 'David Kamau sitting on the grass in a pine forest after a hike' },
+];
+
+// A mixed strip of frames, cropped square. Captions say what is known.
+const moments = [
+  { img: '/images/marathon-portrait.jpg', pos: '45% 28%', alt: 'David Kamau mid-stride in the marathon, in a pink bucket hat and red compression socks, pointing at the camera', cap: 'Marathon day' },
+  { img: '/images/forest-seated.jpg', pos: '55% 45%', alt: 'David Kamau seated on the grass in a pine forest with a water bottle', cap: 'Forest rest' },
+  { img: '/images/cycling.jpg', pos: '48% 30%', alt: 'David Kamau on a bicycle holding up a finisher medal', cap: 'Cycling finisher' },
+  { img: '/images/panel.jpg', pos: '30% 38%', alt: 'David Kamau seated on a panel in a white RYLA polo', cap: 'On a panel' },
+  { img: '/images/hike.jpg', pos: '45% 30%', alt: 'David Kamau with arms outstretched on a ridge above a forested valley', cap: 'On the ridge' },
+  { img: '/images/portrait.jpg', pos: '50% 38%', alt: 'David Kamau smiling with arms folded on an athletics track', cap: 'At the track' },
+];
 ---
 <Base title="David (Dexter) Kamau — Strategic communications, Nairobi">
   <section class="wrap hero" aria-labelledby="hero-h">
@@ -29,14 +47,27 @@ const ou = byKey('outdoors');
       <h1 id="hero-h">Making institutions understandable to the people they serve.</h1>
       <p class="bio">David (Dexter) Kamau is Marketing and Communications Officer at CIB Kenya, where he manages institutional campaigns across wealth, corporate, SME and retail. Beyond the bank he has chaired RYLA Kenya, chartered Rotaract Club of Jabali, and moderated panels and hosted events. He also writes, runs and hikes.</p>
       <div class="actions">
-        <a class="btn" href="/communications/">Read the communications work</a>
-        <a class="link-strong" href="/contact/">Enquire about a collaboration</a>
+        <a class="btn" href={u('/communications/')}>Read the communications work</a>
+        <a class="link-strong" href={u('/contact/')}>Enquire about a collaboration</a>
       </div>
     </div>
     <figure>
-      <img src="/images/cib-portrait-full.jpg" alt="David Kamau in a striped shirt and blue tie, hand at his chin, standing beside a CIB banner reading The Most Awarded Bank in Africa, Now in Kenya" width="1000" height="1500" fetchpriority="high" />
-      <figcaption class="muted" style="margin-top:10px">At a CIB Kenya event, Nairobi Serena.</figcaption>
+      <img src={u(site.hero.image)} alt={site.hero.alt} width="1000" height="1500" fetchpriority="high" />
+      <figcaption class="muted" style="margin-top:10px">{site.hero.caption}</figcaption>
     </figure>
+  </section>
+
+  <section class="wrap" aria-label="Ways into the portfolio" style="padding-bottom:clamp(40px,6vw,72px)">
+    <ul class="tiles">
+      {tiles.map((t) => (
+        <li>
+          <a class="tile" href={u(t.href)}>
+            <img src={u(t.img)} alt={t.alt} style={`object-position:${t.pos}`} loading="lazy" />
+            <span class="cap"><strong>{t.title}</strong><span>{t.sub}</span></span>
+          </a>
+        </li>
+      ))}
+    </ul>
   </section>
 
   <section class="evidence" aria-labelledby="evidence-h">
@@ -76,21 +107,21 @@ const ou = byKey('outdoors');
     </div>
     <div class="split">
       <figure class="photo" style="flex:1 1 360px">
-        <img src="/images/cib-presenting.jpg" alt="David Kamau presenting beside a screen at a CIB Kenya event at Nairobi Serena" style="aspect-ratio:3/2" loading="lazy" />
-        <figcaption>MC at the CIB Cohort 3 programme ceremony, Nairobi Serena, 2025.</figcaption>
+        <img src={u('/images/cib-presenting.jpg')} alt="David Kamau presenting beside a screen at the CIB Kenya graduation ceremony at Nairobi Serena" style="aspect-ratio:3/2" loading="lazy" />
+        <figcaption>MC at the East Africa Banking Credit Program Cohort 3 graduation, 18 November 2025.</figcaption>
       </figure>
       <figure class="photo" style="flex:1 1 360px">
-        <img src="/images/cib-ceremony.jpg" alt="David Kamau and CIB Kenya's Head of Human Resource and Culture reviewing a folder before a ceremony" style="aspect-ratio:3/2" loading="lazy" />
+        <img src={u('/images/cib-ceremony.jpg')} alt="David Kamau and CIB Kenya's Head of Human Resource and Culture reviewing a folder before the ceremony" style="aspect-ratio:3/2" loading="lazy" />
         <figcaption>Before the ceremony, with CIB Kenya's Head of Human Resource and Culture.</figcaption>
       </figure>
     </div>
-    <p style="margin-top:24px"><a class="link-strong" href="/communications/">All communications work</a></p>
+    <p style="margin-top:24px"><a class="link-strong" href={u('/communications/')}>All communications work</a></p>
   </section>
 
   <section class="wrap sec" id="creative" aria-labelledby="creative-h">
     <div class="sec-head"><span class="n">02</span><h2 id="creative-h">The Creative Studio</h2></div>
     <p class="lede">Image-led design work, mostly built in Canva, grouped by category and shown as it is. The gallery opens once your designs are in.</p>
-    <p style="margin-top:24px"><a class="link-strong" href="/creative-studio/">What goes in the studio</a></p>
+    <p style="margin-top:24px"><a class="link-strong" href={u('/creative-studio/')}>What goes in the studio</a></p>
   </section>
 
   <section class="wrap sec" id="writing" aria-labelledby="writing-h">
@@ -105,6 +136,7 @@ const ou = byKey('outdoors');
         </li>
       ))}
     </ul>
+    <p style="margin-top:24px"><a class="link-strong" href={site.newsletter} rel="noopener">Read Fragments of Insights on LinkedIn</a></p>
   </section>
 
   <section class="wrap sec" id="leadership" aria-labelledby="lead-h">
@@ -113,7 +145,7 @@ const ou = byKey('outdoors');
     <div class="cards">
       {leadership.map((e) => <EntryCard entry={e} section={lead} />)}
     </div>
-    <p style="margin-top:24px"><a class="link-strong" href="/timeline/">The full timeline, from 2022</a></p>
+    <p style="margin-top:24px"><a class="link-strong" href={u('/timeline/')}>The full timeline, from 2022</a></p>
   </section>
 
   <section class="wrap sec" id="stage" aria-labelledby="stage-h">
@@ -129,15 +161,15 @@ const ou = byKey('outdoors');
             </li>
           ))}
         </ul>
-        <p style="margin-top:24px"><a class="link-strong" href="/contact/">Enquire about MC or moderation</a></p>
+        <p style="margin-top:24px"><a class="link-strong" href={u('/contact/')}>Enquire about MC or moderation</a></p>
       </div>
       <div style="flex:1 1 400px; display:flex; flex-wrap:wrap; gap:16px">
         <figure class="photo" style="flex:1 1 180px">
-          <img src="/images/mc-red.jpg" alt="David Kamau hosting an event, speaking into a microphone in a red shirt and black waistcoat" style="aspect-ratio:2/3" loading="lazy" />
+          <img src={u('/images/mc-red.jpg')} alt="David Kamau hosting an event, speaking into a microphone in a red shirt and black waistcoat" style="aspect-ratio:2/3" loading="lazy" />
           <figcaption>MC appearance. Event to confirm.</figcaption>
         </figure>
         <figure class="photo" style="flex:1 1 180px; margin-top:48px">
-          <img src="/images/panel.jpg" alt="David Kamau seated on a panel in a white RYLA polo while a fellow panellist speaks" style="aspect-ratio:2/3" loading="lazy" />
+          <img src={u('/images/panel.jpg')} alt="David Kamau seated on a panel in a white RYLA polo while a fellow panellist speaks" style="aspect-ratio:2/3" loading="lazy" />
           <figcaption>Panel appearance. Event to confirm.</figcaption>
         </figure>
       </div>
@@ -151,7 +183,7 @@ const ou = byKey('outdoors');
       {marathon && (
         <div class="split">
           <figure class="photo" style="flex:1 1 440px">
-            <img src="/images/marathon-b.jpg" alt="David Kamau running the marathon in a pink bucket hat, bib 2005, pointing at the camera" style="aspect-ratio:3/2" loading="lazy" />
+            <img src={u('/images/marathon-b.jpg')} alt="David Kamau running the marathon in a pink bucket hat, bib 2005, pointing at the camera" style="aspect-ratio:3/2" loading="lazy" />
             <figcaption>Standard Chartered Nairobi Marathon.</figcaption>
           </figure>
           <div style="flex:1 1 360px">
@@ -176,22 +208,32 @@ const ou = byKey('outdoors');
             </dl>
           </div>
           <figure class="photo" style="flex:0 1 400px; min-width:240px">
-            <img src="/images/hike.jpg" alt="David Kamau with arms outstretched on a grassy ridge above a forested valley" style="aspect-ratio:4/5" loading="lazy" />
+            <img src={u('/images/hike.jpg')} alt="David Kamau with arms outstretched on a grassy ridge above a forested valley" style="aspect-ratio:4/5" loading="lazy" />
             <figcaption>Forest hike. Location to confirm.</figcaption>
           </figure>
         </div>
       )}
-      <p style="margin-top:32px"><a class="link-strong" style="color:var(--paper);text-decoration-color:var(--ember)" href="/outdoors/">All outdoor entries</a></p>
+      <p style="margin-top:32px"><a class="link-strong" style="color:var(--paper);text-decoration-color:var(--ember)" href={u('/outdoors/')}>All outdoor entries</a></p>
     </div>
   </section>
 
+  <section class="wrap sec" aria-labelledby="moments-h">
+    <div class="sec-head"><span class="n">07</span><h2 id="moments-h">Moments</h2></div>
+    <p class="lede">Frames from running, hiking, panels and the track. Captions name only what is known.</p>
+    <ul class="strip" style="margin-top:32px">
+      {moments.map((m) => (
+        <li><figure><img src={u(m.img)} alt={m.alt} style={`object-position:${m.pos}`} loading="lazy" /><figcaption>{m.cap}</figcaption></figure></li>
+      ))}
+    </ul>
+  </section>
+
   <section class="wrap sec" id="explore" aria-labelledby="explore-h">
-    <div class="sec-head"><span class="n">07</span><h2 id="explore-h">The full portfolio</h2></div>
+    <div class="sec-head"><span class="n">08</span><h2 id="explore-h">The full portfolio</h2></div>
     <p class="lede">Every section has its own permanent address, so a link to one lands on that section with the whole site a click away.</p>
     <ul class="sitemap">
-      {sections.map((s) => <li><a href={`/${s.slug}/`}><span>{s.short}</span><code>/{s.slug}</code></a></li>)}
-      <li><a href="/timeline/"><span>Timeline</span><code>/timeline</code></a></li>
-      <li><a href="/about/"><span>About</span><code>/about</code></a></li>
+      {sections.map((s) => <li><a href={u(`/${s.slug}/`)}><span>{s.short}</span><code>/{s.slug}</code></a></li>)}
+      <li><a href={u('/timeline/')}><span>Timeline</span><code>/timeline</code></a></li>
+      <li><a href={u('/about/')}><span>About</span><code>/about</code></a></li>
     </ul>
   </section>
 
@@ -202,7 +244,10 @@ const ou = byKey('outdoors');
         <p style="margin-top:16px;font-size:17px;color:#E4DED0;max-width:420px">Strategic communications, consulting, speaking, MC and moderation, partnerships, creative projects.</p>
       </div>
       <div>
-        <p><a href="/contact/">Contact details and enquiry types</a></p>
+        <p><span class="k">Email</span><a href={`mailto:${site.email}`}>{site.email}</a></p>
+        <p><span class="k">Phone</span><a href={`tel:${site.phoneHref}`}>{site.phone}</a></p>
+        <p><span class="k">LinkedIn</span><a href={site.linkedin} rel="noopener">linkedin.com/in/david-kamau-983008350</a></p>
+        <p style="margin-top:16px"><a href={u('/contact/')}>All contact details and enquiry types</a></p>
       </div>
     </div>
   </section>

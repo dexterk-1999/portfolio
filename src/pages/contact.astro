@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import site from '../data/site.json';
 const enquiries = [
   'Strategic communications opportunities',
   'Consulting and collaborations',
@@ -20,12 +21,13 @@ const enquiries = [
     <div class="contact" style="margin-top:40px">
       <div>
         <h2>Details</h2>
-        <p style="margin-top:16px;color:#E4DED0">The links below are added once you confirm them. Nothing here is a working link yet, so the page does not pretend otherwise.</p>
+        <p style="margin-top:16px;color:#E4DED0">{site.location}</p>
       </div>
       <div>
-        <p><span class="k">Email</span>To confirm</p>
-        <p><span class="k">LinkedIn</span>To supply</p>
-        <p><span class="k">Fragments of Insights</span>To supply</p>
+        <p><span class="k">Email</span><a href={`mailto:${site.email}`}>{site.email}</a></p>
+        <p><span class="k">Phone</span><a href={`tel:${site.phoneHref}`}>{site.phone}</a></p>
+        <p><span class="k">LinkedIn</span><a href={site.linkedin} rel="noopener">linkedin.com/in/david-kamau-983008350</a></p>
+        <p><span class="k">Fragments of Insights</span><a href={site.newsletter} rel="noopener">Read the newsletter on LinkedIn</a></p>
         <p><span class="k">CV and professional profile</span>To supply as PDF</p>
       </div>
     </div>

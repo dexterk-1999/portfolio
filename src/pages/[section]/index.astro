@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import EntryCard from '../../components/EntryCard.astro';
+import site from '../../data/site.json';
 import { sections, entriesFor } from '../../lib/sections';
 
 export function getStaticPaths() {
@@ -15,6 +16,20 @@ const field = section.key === 'outdoors';
     <div class="sec" style="padding-top:clamp(32px,5vw,64px)">
       <div class="sec-head"><span class="n">{section.n}</span><h1 class="page-title">{section.title}</h1></div>
       <p class="lede">{section.intro}</p>
+
+      {section.key === 'writing' && (
+        <div class="feature">
+          <div class="main">
+            <span class="tag">Newsletter</span>
+            <h3><a href={site.newsletter} rel="noopener">Fragments of Insights</a></h3>
+            <p>Essays and observations, published on LinkedIn. Each article is listed below with a link to the original.</p>
+          </div>
+          <dl>
+            <dt>Read it on</dt><dd><a href={site.newsletter} rel="noopener" style="color:#F2C9B3">LinkedIn</a></dd>
+          </dl>
+        </div>
+      )}
+
       <div class="cards">
         {entries.map((e) => <EntryCard entry={e} section={section} image={true} />)}
       </div>

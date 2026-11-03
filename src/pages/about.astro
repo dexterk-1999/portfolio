@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { u } from '../lib/sections';
 ---
 <Base title="About" description="About David (Dexter) Kamau: strategic communications professional, community builder, writer and runner based in Nairobi.">
   <div class="wrap sec" style="padding-top:clamp(32px,5vw,64px)">
@@ -18,7 +19,7 @@ import Base from '../layouts/Base.astro';
         <p class="muted" style="margin-top:8px">To confirm: your Kiswahili and French levels as you want them shown, and the dates for your degree.</p>
       </div>
       <figure class="photo" style="flex:0 1 380px; min-width:240px">
-        <img src="/images/portrait.jpg" alt="David Kamau smiling with arms folded on an athletics track, wearing a black and pink running jacket" style="aspect-ratio:2/3" />
+        <img src={u('/images/portrait.jpg')} alt="David Kamau smiling with arms folded on an athletics track, wearing a black and pink running jacket" style="aspect-ratio:2/3" />
         <figcaption>Photographer to supply.</figcaption>
       </figure>
     </div>

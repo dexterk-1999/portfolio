@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import { sections, entryUrl, formatDate, statusLabel } from '../../lib/sections';
+import { sections, u, formatDate, statusLabel } from '../../lib/sections';
 
 export async function getStaticPaths() {
   const paths = [];
@@ -40,10 +40,10 @@ const stats: [string, string | undefined][] = [
   ['Elevation', d.elevation],
 ].filter(([, v]) => v) as [string, string][];
 ---
-<Base title={d.title} description={d.summary} image={d.cover} theme={field ? 'field' : 'paper'}>
+<Base title={d.title} description={d.summary} image={d.cover ?? undefined} theme={field ? 'field' : 'paper'}>
   <div class="wrap">
     <div class="entry-head">
-      <p class="eyebrow"><a href={`/${section.slug}/`} style="color:inherit">{section.short}</a></p>
+      <p class="eyebrow"><a href={u(`/${section.slug}/`)} style="color:inherit">{section.short}</a></p>
       <h1>{d.title}</h1>
       <p class="summary">{d.summary}</p>
       <p style="margin-top:16px"><span class={`tag ${d.status}`}>{statusLabel[d.status]}</span></p>
@@ -64,7 +64,7 @@ const stats: [string, string | undefined][] = [
       <aside class="entry-aside">
         {d.cover && (
           <figure class="photo">
-            <img src={d.cover} alt={d.coverAlt ?? ''} />
+            <img src={u(d.cover)} alt={d.coverAlt ?? ''} />
             {d.credit && <figcaption>{d.credit}</figcaption>}
           </figure>
         )}
@@ -76,7 +76,7 @@ const stats: [string, string | undefined][] = [
         )}
         {d.link && <p style="margin-top:20px"><a href={d.link} rel="noopener">Read the original</a></p>}
         {d.tags.length > 0 && <ul class="tags">{d.tags.map((t) => <li>{t}</li>)}</ul>}
-        <a class="back" href={`/${section.slug}/`}>Back to {section.short}</a>
+        <a class="back" href={u(`/${section.slug}/`)}>Back to {section.short}</a>
       </aside>
     </div>
   </div>

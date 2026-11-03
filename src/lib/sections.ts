@@ -60,7 +60,12 @@ export async function entriesFor(key: Section['collection']) {
   });
 }
 
-export const entryUrl = (section: Section, id: string) => `/${section.slug}/${id}/`;
+// Prefix site-relative paths with the base path, so the site works at the root of a
+// domain and under a sub-path such as https://name.github.io/portfolio/.
+export const u = (p: string) =>
+  p.startsWith('/') ? import.meta.env.BASE_URL.replace(/\/$/, '') + p : p;
+
+export const entryUrl = (section: Section, id: string) => u(`/${section.slug}/${id}/`);
 
 export function formatDate(d?: string) {
   if (!d) return undefined;

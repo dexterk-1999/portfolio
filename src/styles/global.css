@@ -184,3 +184,22 @@ a:hover { color: var(--accent); }
 .field-page .footer .wrap { color: #B9B2A0; }
 
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* Photo tiles: cropped portraits with an overlay, used as visual navigation */
+.tiles { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.tile { position: relative; display: block; aspect-ratio: 3/4; overflow: hidden; background: var(--ink); color: var(--paper); text-decoration: none; }
+.tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+.tile::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(14,34,56,.92) 0%, rgba(14,34,56,.55) 32%, rgba(14,34,56,0) 62%); }
+.tile .cap { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; padding: 20px; }
+.tile .cap strong { display: block; font-family: var(--serif); font-weight: 600; font-size: 26px; line-height: 1.1; }
+.tile .cap span { display: block; margin-top: 6px; font-size: 14px; color: #E4DED0; }
+.tile:hover { color: var(--paper); }
+.tile:hover img { transform: scale(1.04); }
+.tile:focus-visible { outline-offset: -3px; }
+
+/* Moments: a mixed strip of frames, cropped square */
+.strip { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+.strip figure img { display: block; width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+.strip figcaption { margin-top: 6px; font-size: 13px; color: var(--muted); }
+
+@media (prefers-reduced-motion: reduce) { .tile img { transition: none; } }

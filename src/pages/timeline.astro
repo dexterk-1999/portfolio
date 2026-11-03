@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import milestones from '../data/milestones.json';
-import { formatDate } from '../lib/sections';
+import { formatDate, u } from '../lib/sections';
 
 const labels: Record<string, string> = { career: 'Career', leadership: 'Leadership', stage: 'The Stage', outdoors: 'Outdoors' };
 const items = [...milestones].sort((a, b) => b.date.localeCompare(a.date));
@@ -22,7 +22,7 @@ const cats = [...new Set(items.map((i) => i.category))];
         <li data-category={i.category}>
           <p class="when">{formatDate(i.date)}</p>
           <p class="cat">{labels[i.category] ?? i.category}</p>
-          <h3>{i.href ? <a href={i.href} style="color:inherit">{i.title}</a> : i.title}</h3>
+          <h3>{i.href ? <a href={u(i.href)} style="color:inherit">{i.title}</a> : i.title}</h3>
           <p>{i.text}</p>
         </li>
       ))}
