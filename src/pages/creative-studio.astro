@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+const groups = [
+  'Posters and event branding',
+  'Social media creatives',
+  'Presentations and decks',
+  'Infographics and editorial layouts',
+  'Brand systems and experiments',
+];
+---
+<Base title="The Creative Studio" description="Design work by David (Dexter) Kamau: posters, event branding, social creatives, presentations and brand systems.">
+  <div class="wrap sec" style="padding-top:clamp(32px,5vw,64px)">
+    <div class="sec-head"><span class="n">02</span><h1 class="page-title">The Creative Studio</h1></div>
+    <p class="lede">Image-led design work, mostly built in Canva and growing into Affinity and Adobe tools. The gallery shows the work as it is, grouped by category, with the brief, the idea and the result for each project.</p>
+    <p class="lede" style="margin-top:12px">The gallery is empty on purpose. It opens when your actual designs are added, rather than filling it with stand-ins.</p>
+
+    <h2 class="eyebrow" style="margin-top:48px">Categories planned</h2>
+    <ul class="rows">
+      {groups.map((g) => <li><h3>{g}</h3></li>)}
+    </ul>
+
+    <h2 class="eyebrow" style="margin-top:48px">Candidate work to add</h2>
+    <ul class="rows">
+      <li><h3>Rotaract District 9212 inductee training presentation</h3><p>19 slides with embedded photographs and interactive elements.</p></li>
+      <li><h3>The Leader Within Africa brand system</h3><p>Midnight Navy, Ocean Blue, Coral and Sky palette; DM Serif Display and DM Sans; compass logo.</p></li>
+      <li><h3>Rotaract Jabali orientation deck and annual plan</h3><p>Documents produced for the club.</p></li>
+    </ul>
+    <p class="muted" style="margin-top:16px">Send exports (PNG or PDF) and I will add them with the brief, concept and tools for each.</p>
+  </div>
+</Base>

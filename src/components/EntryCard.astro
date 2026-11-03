@@ -1,0 +1,14 @@
+---
+import { entryUrl, formatDate, statusLabel, type Section } from '../lib/sections';
+interface Props { entry: any; section: Section; image?: boolean }
+const { entry, section, image = false } = Astro.props;
+const d = entry.data;
+const when = formatDate(d.date) ?? d.period;
+---
+<article class="card">
+  {image && d.cover && <img src={d.cover} alt={d.coverAlt ?? ''} loading="lazy" />}
+  <span class={`tag ${d.status}`}>{statusLabel[d.status]}</span>
+  <h3><a href={entryUrl(section, entry.id)}>{d.title}</a></h3>
+  <p>{d.summary}</p>
+  {when && <p class="meta">{when}</p>}
+</article>

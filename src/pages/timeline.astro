@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import milestones from '../data/milestones.json';
+import { formatDate } from '../lib/sections';
+
+const labels: Record<string, string> = { career: 'Career', leadership: 'Leadership', stage: 'The Stage', outdoors: 'Outdoors' };
+const items = [...milestones].sort((a, b) => b.date.localeCompare(a.date));
+const cats = [...new Set(items.map((i) => i.category))];
+---
+<Base title="Timeline" description="A timeline of David (Dexter) Kamau's career, leadership roles, speaking engagements and outdoor milestones, from 2022.">
+  <div class="wrap sec" style="padding-top:clamp(32px,5vw,64px)">
+    <div class="sec-head"><span class="n">07</span><h1 class="page-title">Timeline</h1></div>
+    <p class="lede">From 2022 to today, newest first. Filter by type of milestone.</p>
+
+    <div class="filters" id="filters" role="group" aria-label="Filter timeline" hidden>
+      <button type="button" data-filter="all" aria-pressed="true">All</button>
+      {cats.map((c) => <button type="button" data-filter={c} aria-pressed="false">{labels[c] ?? c}</button>)}
+    </div>
+
+    <ol class="timeline" id="timeline">
+      {items.map((i) => (
+        <li data-category={i.category}>
+          <p class="when">{formatDate(i.date)}</p>
+          <p class="cat">{labels[i.category] ?? i.category}</p>
+          <h3>{i.href ? <a href={i.href} style="color:inherit">{i.title}</a> : i.title}</h3>
+          <p>{i.text}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var box = document.getElementById('filters');
+      if (!box) return;
+      box.hidden = false;
+      var items = document.querySelectorAll('#timeline li');
+      box.addEventListener('click', function (e) {
+        var b = e.target.closest('button[data-filter]');
+        if (!b) return;
+        var f = b.getAttribute('data-filter');
+        box.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        items.forEach(function (li) { li.hidden = f !== 'all' && li.getAttribute('data-category') !== f; });
+      });
+    })();
+  </script>
+</Base>

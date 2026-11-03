@@ -1,0 +1,83 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { sections, entryUrl, formatDate, statusLabel } from '../../lib/sections';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const s of sections.filter((s) => s.collection)) {
+    const entries = await getCollection(s.collection!);
+    for (const entry of entries) paths.push({ params: { section: s.slug, slug: entry.id }, props: { entry, section: s } });
+  }
+  return paths;
+}
+
+const { entry, section } = Astro.props;
+const d = entry.data;
+const { Content } = await render(entry);
+const field = section.key === 'outdoors';
+
+const meta: [string, string | undefined][] = [
+  ['Organisation', d.organisation],
+  ['My role', d.role],
+  ['My contribution', d.contribution],
+  ['Partners', d.partners],
+  ['Event', d.event],
+  ['Host', d.host],
+  ['Audience', d.audience],
+  ['Topic', d.topic],
+  ['Location', d.location],
+  ['Date', formatDate(d.date)],
+  ['Period', d.period],
+  ['Published in', d.category],
+].filter(([, v]) => v) as [string, string][];
+
+const stats: [string, string | undefined][] = [
+  ['Finish time', d.finishTime],
+  ['Distance', d.distance],
+  ['Moving time', d.movingTime],
+  ['Elapsed', d.elapsedTime],
+  ['Elevation', d.elevation],
+].filter(([, v]) => v) as [string, string][];
+---
+<Base title={d.title} description={d.summary} image={d.cover} theme={field ? 'field' : 'paper'}>
+  <div class="wrap">
+    <div class="entry-head">
+      <p class="eyebrow"><a href={`/${section.slug}/`} style="color:inherit">{section.short}</a></p>
+      <h1>{d.title}</h1>
+      <p class="summary">{d.summary}</p>
+      <p style="margin-top:16px"><span class={`tag ${d.status}`}>{statusLabel[d.status]}</span></p>
+      {meta.length > 0 && (
+        <dl class="meta-strip">
+          {meta.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
+        </dl>
+      )}
+      {stats.length > 0 && (
+        <dl class="stats">
+          {stats.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
+        </dl>
+      )}
+    </div>
+
+    <div class="entry-body">
+      <div class="prose"><Content /></div>
+      <aside class="entry-aside">
+        {d.cover && (
+          <figure class="photo">
+            <img src={d.cover} alt={d.coverAlt ?? ''} />
+            {d.credit && <figcaption>{d.credit}</figcaption>}
+          </figure>
+        )}
+        {d.stravaId && d.stravaToken && (
+          <div style="margin-top:24px">
+            <div class="strava-embed-placeholder" data-embed-type="activity" data-embed-id={d.stravaId} data-style="standard" data-from-embed="false" data-token={d.stravaToken}></div>
+            <script is:inline src="https://strava-embeds.com/embed.js"></script>
+          </div>
+        )}
+        {d.link && <p style="margin-top:20px"><a href={d.link} rel="noopener">Read the original</a></p>}
+        {d.tags.length > 0 && <ul class="tags">{d.tags.map((t) => <li>{t}</li>)}</ul>}
+        <a class="back" href={`/${section.slug}/`}>Back to {section.short}</a>
+      </aside>
+    </div>
+  </div>
+</Base>

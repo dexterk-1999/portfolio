@@ -1,0 +1,24 @@
+---
+import Base from '../../layouts/Base.astro';
+import EntryCard from '../../components/EntryCard.astro';
+import { sections, entriesFor } from '../../lib/sections';
+
+export function getStaticPaths() {
+  return sections.filter((s) => s.collection).map((s) => ({ params: { section: s.slug }, props: { section: s } }));
+}
+const { section } = Astro.props;
+const entries = await entriesFor(section.collection);
+const field = section.key === 'outdoors';
+---
+<Base title={section.title} description={section.intro} theme={field ? 'field' : 'paper'}>
+  <div class={`wrap ${field ? 'field' : ''}`} style={field ? 'background:transparent' : undefined}>
+    <div class="sec" style="padding-top:clamp(32px,5vw,64px)">
+      <div class="sec-head"><span class="n">{section.n}</span><h1 class="page-title">{section.title}</h1></div>
+      <p class="lede">{section.intro}</p>
+      <div class="cards">
+        {entries.map((e) => <EntryCard entry={e} section={section} image={true} />)}
+      </div>
+      {entries.length === 0 && <p class="lede">Entries will appear here as they are added.</p>}
+    </div>
+  </div>
+</Base>

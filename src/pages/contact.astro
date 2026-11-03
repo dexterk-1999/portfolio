@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+const enquiries = [
+  'Strategic communications opportunities',
+  'Consulting and collaborations',
+  'Speaking engagements',
+  'MC and moderation',
+  'Partnerships',
+  'Creative projects',
+];
+---
+<Base title="Contact" description="Contact David (Dexter) Kamau about communications work, speaking, MC and moderation, partnerships and creative projects.">
+  <div class="wrap sec" style="padding-top:clamp(32px,5vw,64px)">
+    <div class="sec-head"><span class="n">09</span><h1 class="page-title">Contact</h1></div>
+    <p class="lede">Get in touch about any of these.</p>
+    <ul class="rows">
+      {enquiries.map((e) => <li><h3>{e}</h3></li>)}
+    </ul>
+
+    <div class="contact" style="margin-top:40px">
+      <div>
+        <h2>Details</h2>
+        <p style="margin-top:16px;color:#E4DED0">The links below are added once you confirm them. Nothing here is a working link yet, so the page does not pretend otherwise.</p>
+      </div>
+      <div>
+        <p><span class="k">Email</span>To confirm</p>
+        <p><span class="k">LinkedIn</span>To supply</p>
+        <p><span class="k">Fragments of Insights</span>To supply</p>
+        <p><span class="k">CV and professional profile</span>To supply as PDF</p>
+      </div>
+    </div>
+  </div>
+</Base>

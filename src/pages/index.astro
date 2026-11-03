@@ -1,0 +1,209 @@
+---
+import Base from '../layouts/Base.astro';
+import EntryCard from '../components/EntryCard.astro';
+import figures from '../data/figures.json';
+import { sections, byKey, entriesFor, entryUrl, statusLabel } from '../lib/sections';
+
+const comms = (await entriesFor('communications'));
+const leadership = (await entriesFor('leadership'));
+const writing = (await entriesFor('writing'));
+const stage = (await entriesFor('stage'));
+const outdoors = (await entriesFor('outdoors'));
+
+const featured = comms.find((e) => e.data.featured) ?? comms[0];
+const otherComms = comms.filter((e) => e.id !== featured?.id).slice(0, 3);
+const jabali = leadership.find((e) => e.id === 'rotaract-jabali');
+const marathon = outdoors.find((e) => e.id === 'nairobi-marathon-2026');
+const dash = outdoors.find((e) => e.id === 'mt-kenya-day-dash');
+
+const cs = byKey('communications');
+const lead = byKey('leadership');
+const wr = byKey('writing');
+const st = byKey('stage');
+const ou = byKey('outdoors');
+---
+<Base title="David (Dexter) Kamau — Strategic communications, Nairobi">
+  <section class="wrap hero" aria-labelledby="hero-h">
+    <div class="hero-copy">
+      <p class="eyebrow">Strategic communications · Nairobi</p>
+      <h1 id="hero-h">Making institutions understandable to the people they serve.</h1>
+      <p class="bio">David (Dexter) Kamau is Marketing and Communications Officer at CIB Kenya, where he manages institutional campaigns across wealth, corporate, SME and retail. Beyond the bank he has chaired RYLA Kenya, chartered Rotaract Club of Jabali, and moderated panels and hosted events. He also writes, runs and hikes.</p>
+      <div class="actions">
+        <a class="btn" href="/communications/">Read the communications work</a>
+        <a class="link-strong" href="/contact/">Enquire about a collaboration</a>
+      </div>
+    </div>
+    <figure>
+      <img src="/images/cib-portrait-full.jpg" alt="David Kamau in a striped shirt and blue tie, hand at his chin, standing beside a CIB banner reading The Most Awarded Bank in Africa, Now in Kenya" width="1000" height="1500" fetchpriority="high" />
+      <figcaption class="muted" style="margin-top:10px">At a CIB Kenya event, Nairobi Serena.</figcaption>
+    </figure>
+  </section>
+
+  <section class="evidence" aria-labelledby="evidence-h">
+    <div class="wrap">
+      <h2 id="evidence-h" class="eyebrow">Selected figures, each with its source</h2>
+      <div class="figures">
+        {figures.map((f) => (
+          <div class="figure-item">
+            <p class="v">{f.value}</p>
+            <p>{f.label}</p>
+            <p class="muted" style="margin-top:8px">Source: {f.source}. {f.period}.</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap sec" id="communications" aria-labelledby="comms-h">
+    <div class="sec-head"><span class="n">{cs.n}</span><h2 id="comms-h">{cs.title}</h2></div>
+    <p class="lede">{cs.intro}</p>
+    {featured && (
+      <div class="feature">
+        <div class="main">
+          <span class="tag">{statusLabel[featured.data.status]}</span>
+          <h3><a href={entryUrl(cs, featured.id)}>{featured.data.title}</a></h3>
+          <p>{featured.data.summary}</p>
+        </div>
+        <dl>
+          <dt>Organisation</dt><dd>{featured.data.organisation}</dd>
+          <dt>My role</dt><dd>{featured.data.contribution}</dd>
+          <dt>Period</dt><dd>{featured.data.period}</dd>
+        </dl>
+      </div>
+    )}
+    <div class="cards">
+      {otherComms.map((e) => <EntryCard entry={e} section={cs} />)}
+    </div>
+    <div class="split">
+      <figure class="photo" style="flex:1 1 360px">
+        <img src="/images/cib-presenting.jpg" alt="David Kamau presenting beside a screen at a CIB Kenya event at Nairobi Serena" style="aspect-ratio:3/2" loading="lazy" />
+        <figcaption>MC at the CIB Cohort 3 programme ceremony, Nairobi Serena, 2025.</figcaption>
+      </figure>
+      <figure class="photo" style="flex:1 1 360px">
+        <img src="/images/cib-ceremony.jpg" alt="David Kamau and CIB Kenya's Head of Human Resource and Culture reviewing a folder before a ceremony" style="aspect-ratio:3/2" loading="lazy" />
+        <figcaption>Before the ceremony, with CIB Kenya's Head of Human Resource and Culture.</figcaption>
+      </figure>
+    </div>
+    <p style="margin-top:24px"><a class="link-strong" href="/communications/">All communications work</a></p>
+  </section>
+
+  <section class="wrap sec" id="creative" aria-labelledby="creative-h">
+    <div class="sec-head"><span class="n">02</span><h2 id="creative-h">The Creative Studio</h2></div>
+    <p class="lede">Image-led design work, mostly built in Canva, grouped by category and shown as it is. The gallery opens once your designs are in.</p>
+    <p style="margin-top:24px"><a class="link-strong" href="/creative-studio/">What goes in the studio</a></p>
+  </section>
+
+  <section class="wrap sec" id="writing" aria-labelledby="writing-h">
+    <div class="sec-head"><span class="n">{wr.n}</span><h2 id="writing-h">{wr.title}</h2></div>
+    <p class="lede">{wr.intro}</p>
+    <ul class="rows">
+      {writing.map((e) => (
+        <li>
+          {e.data.category && <p class="kicker">{e.data.category}</p>}
+          <h3><a href={entryUrl(wr, e.id)}>{e.data.title}</a></h3>
+          <p>{e.data.summary}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="wrap sec" id="leadership" aria-labelledby="lead-h">
+    <div class="sec-head"><span class="n">{lead.n}</span><h2 id="lead-h">{lead.title}</h2></div>
+    <p class="lede">{lead.intro}</p>
+    <div class="cards">
+      {leadership.map((e) => <EntryCard entry={e} section={lead} />)}
+    </div>
+    <p style="margin-top:24px"><a class="link-strong" href="/timeline/">The full timeline, from 2022</a></p>
+  </section>
+
+  <section class="wrap sec" id="stage" aria-labelledby="stage-h">
+    <div class="sec-head"><span class="n">{st.n}</span><h2 id="stage-h">{st.title}</h2></div>
+    <div class="split">
+      <div style="flex:1 1 400px">
+        <p class="lede" style="margin-top:0">{st.intro}</p>
+        <ul class="rows">
+          {stage.map((e) => (
+            <li>
+              <h3><a href={entryUrl(st, e.id)}>{e.data.title}</a></h3>
+              <p>{e.data.summary}</p>
+            </li>
+          ))}
+        </ul>
+        <p style="margin-top:24px"><a class="link-strong" href="/contact/">Enquire about MC or moderation</a></p>
+      </div>
+      <div style="flex:1 1 400px; display:flex; flex-wrap:wrap; gap:16px">
+        <figure class="photo" style="flex:1 1 180px">
+          <img src="/images/mc-red.jpg" alt="David Kamau hosting an event, speaking into a microphone in a red shirt and black waistcoat" style="aspect-ratio:2/3" loading="lazy" />
+          <figcaption>MC appearance. Event to confirm.</figcaption>
+        </figure>
+        <figure class="photo" style="flex:1 1 180px; margin-top:48px">
+          <img src="/images/panel.jpg" alt="David Kamau seated on a panel in a white RYLA polo while a fellow panellist speaks" style="aspect-ratio:2/3" loading="lazy" />
+          <figcaption>Panel appearance. Event to confirm.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="outdoors" aria-labelledby="out-h" style="margin-top:clamp(48px,7vw,96px); background:var(--field); color:var(--sand); padding-bottom:clamp(48px,7vw,88px)">
+    <div class="wrap field" style="background:transparent">
+      <div class="sec-head"><span class="n" style="color:var(--ember)">{ou.n}</span><h2 id="out-h">{ou.title}</h2></div>
+      <p class="lede">{ou.intro}</p>
+      {marathon && (
+        <div class="split">
+          <figure class="photo" style="flex:1 1 440px">
+            <img src="/images/marathon-b.jpg" alt="David Kamau running the marathon in a pink bucket hat, bib 2005, pointing at the camera" style="aspect-ratio:3/2" loading="lazy" />
+            <figcaption>Standard Chartered Nairobi Marathon.</figcaption>
+          </figure>
+          <div style="flex:1 1 360px">
+            <p class="eyebrow">Road · first marathon</p>
+            <h3 class="serif" style="margin-top:8px;font-weight:400;font-size:34px;line-height:1.1;color:var(--paper)"><a href={entryUrl(ou, marathon.id)} style="color:inherit;text-decoration:none">{marathon.data.title}</a></h3>
+            <p class="serif" style="margin-top:12px;font-size:56px;line-height:1;color:var(--paper)">{marathon.data.finishTime}</p>
+            <p style="margin-top:12px;font-size:15px">{marathon.data.summary}</p>
+          </div>
+        </div>
+      )}
+      {dash && (
+        <div class="split" style="margin-top:56px">
+          <div style="flex:1 1 380px">
+            <p class="eyebrow">Mountain · 22 August 2026</p>
+            <h3 class="serif" style="margin-top:8px;font-weight:400;font-size:34px;line-height:1.1;color:var(--paper)"><a href={entryUrl(ou, dash.id)} style="color:inherit;text-decoration:none">{dash.data.title}</a></h3>
+            <p style="margin-top:12px;font-size:17px">{dash.data.summary}</p>
+            <dl class="stats">
+              <div><dt>Distance</dt><dd>{dash.data.distance}</dd></div>
+              <div><dt>Moving time</dt><dd>{dash.data.movingTime}</dd></div>
+              <div><dt>Elapsed</dt><dd>{dash.data.elapsedTime}</dd></div>
+              <div><dt>Elevation</dt><dd>{dash.data.elevation}</dd></div>
+            </dl>
+          </div>
+          <figure class="photo" style="flex:0 1 400px; min-width:240px">
+            <img src="/images/hike.jpg" alt="David Kamau with arms outstretched on a grassy ridge above a forested valley" style="aspect-ratio:4/5" loading="lazy" />
+            <figcaption>Forest hike. Location to confirm.</figcaption>
+          </figure>
+        </div>
+      )}
+      <p style="margin-top:32px"><a class="link-strong" style="color:var(--paper);text-decoration-color:var(--ember)" href="/outdoors/">All outdoor entries</a></p>
+    </div>
+  </section>
+
+  <section class="wrap sec" id="explore" aria-labelledby="explore-h">
+    <div class="sec-head"><span class="n">07</span><h2 id="explore-h">The full portfolio</h2></div>
+    <p class="lede">Every section has its own permanent address, so a link to one lands on that section with the whole site a click away.</p>
+    <ul class="sitemap">
+      {sections.map((s) => <li><a href={`/${s.slug}/`}><span>{s.short}</span><code>/{s.slug}</code></a></li>)}
+      <li><a href="/timeline/"><span>Timeline</span><code>/timeline</code></a></li>
+      <li><a href="/about/"><span>About</span><code>/about</code></a></li>
+    </ul>
+  </section>
+
+  <section class="wrap sec" id="contact" aria-labelledby="contact-h">
+    <div class="contact">
+      <div>
+        <h2 id="contact-h">Let's talk.</h2>
+        <p style="margin-top:16px;font-size:17px;color:#E4DED0;max-width:420px">Strategic communications, consulting, speaking, MC and moderation, partnerships, creative projects.</p>
+      </div>
+      <div>
+        <p><a href="/contact/">Contact details and enquiry types</a></p>
+      </div>
+    </div>
+  </section>
+</Base>

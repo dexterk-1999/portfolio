@@ -1,0 +1,25 @@
+---
+const path = Astro.url.pathname;
+const items = [
+  ['Communications', '/communications/'],
+  ['Creative Studio', '/creative-studio/'],
+  ['Writing', '/writing/'],
+  ['Leadership', '/leadership/'],
+  ['The Stage', '/the-stage/'],
+  ['Outdoors', '/outdoors/'],
+  ['Timeline', '/timeline/'],
+  ['About', '/about/'],
+];
+const current = (href: string) => path === href || path.startsWith(href);
+---
+<header class="masthead">
+  <div class="wrap">
+    <a class="brand" href="/">David (Dexter) Kamau</a>
+    <nav class="nav" aria-label="Portfolio sections">
+      {items.map(([label, href]) => (
+        <a href={href} aria-current={current(href) ? 'page' : undefined}>{label}</a>
+      ))}
+      <a class="cta" href="/contact/" aria-current={current('/contact/') ? 'page' : undefined}>Contact</a>
+    </nav>
+  </div>
+</header>
