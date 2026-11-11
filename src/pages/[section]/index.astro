@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import EntryCard from '../../components/EntryCard.astro';
 import site from '../../data/site.json';
+import newsletter from '../../data/newsletter.json';
 import { sections, entriesFor } from '../../lib/sections';
 
 export function getStaticPaths() {
@@ -30,6 +31,18 @@ const field = section.key === 'outdoors';
         </div>
       )}
 
+      {section.key === 'writing' && (
+        <>
+          <h2 class="eyebrow" style="margin-top:48px">All {newsletter.length} newsletter articles</h2>
+          <p class="muted" style="margin-top:8px">Each links to the original on LinkedIn. Some titles are reconstructed from the article links and are being checked against the published wording.</p>
+          <ol class="rows">
+            {newsletter.map((a) => (
+              <li><h3><a href={a.url} rel="noopener">{a.title}</a></h3></li>
+            ))}
+          </ol>
+          <h2 class="eyebrow" style="margin-top:48px">Other writing</h2>
+        </>
+      )}
       <div class="cards">
         {entries.map((e) => <EntryCard entry={e} section={section} image={true} />)}
       </div>

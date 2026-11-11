@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import EntryCard from '../components/EntryCard.astro';
 import figures from '../data/figures.json';
 import site from '../data/site.json';
+import newsletter from '../data/newsletter.json';
 import { sections, byKey, entriesFor, entryUrl, statusLabel, u } from '../lib/sections';
 
 const comms = await entriesFor('communications');
@@ -136,7 +137,7 @@ const moments = [
         </li>
       ))}
     </ul>
-    <p style="margin-top:24px"><a class="link-strong" href={site.newsletter} rel="noopener">Read Fragments of Insights on LinkedIn</a></p>
+    <p style="margin-top:24px"><a class="link-strong" href={u('/writing/')}>All {newsletter.length} Fragments of Insights articles</a></p>
   </section>
 
   <section class="wrap sec" id="leadership" aria-labelledby="lead-h">

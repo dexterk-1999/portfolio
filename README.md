@@ -57,6 +57,10 @@ Put images in `public/images/` (web-sized JPEGs, around 1400 px on the long side
 - `src/data/figures.json` holds the numbers shown on the home page, each with its source and period.
 - `src/data/milestones.json` feeds `/timeline/`. Add a line with a date, category (`career`, `leadership`, `stage`, `outdoors`), title and text.
 
+## Newsletter articles
+
+`src/data/newsletter.json` lists the Fragments of Insights articles shown on `/writing/`. Add a row with `url`, `title` and `titleConfirmed`. Set `titleConfirmed` to `true` once the title matches the published wording.
+
 ## Pages that are not entries
 
 `creative-studio`, `about`, `contact` and `timeline` are single pages in `src/pages/`. The gallery for the Creative Studio is not built until there are designs to put in it.
